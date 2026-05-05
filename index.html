@@ -27,6 +27,11 @@
                 <textarea id="test-area" name="textarea" rows="6" placeholder="The clock starts when you start typing."></textarea>
             </div><!-- .test-wrapper -->
 
+            <div class="error-count">
+                Errors: 
+                <!-- <p>Errors: </p> -->
+            </div>
+
             <div class="meta">
                 <section id="clock">
                     <div class="timer">00:00:00</div>
@@ -34,6 +39,13 @@
 
                 <button id="stop">Stop</button>
                 <button id="reset">Start over</button>
+                
+                <label id="deathmatch-container"disabled>
+                    DeathMatch Mode
+                    <br>
+                    <input type="checkbox" id="deathmatch" ></input>
+                    <span class="dmstyle"></span>
+                </label>
             </div><!-- .meta -->
         </section><!-- .test-area -->
     </main>

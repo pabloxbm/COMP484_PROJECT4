@@ -202,3 +202,16 @@ body {
     color: white;
     background-color: #e9160f;
 }
+
+.dmstyle{
+    display: inline-block;
+    color: red;
+    background-color: red;
+    width: 10rem;
+    height: 2rem;
+}
+#deathmatch{
+    background-color:#0D1B2E;
+    color: red;
+    border-color: #e9160f;
+}

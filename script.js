@@ -4,18 +4,24 @@ var timerS = 0;
 var timerM = 0;
 let hasCompleted = false;
 let isStopped = true;
+let errorCount = 0;
+let oldCharLength = 0;
 
 const testWrapper = document.querySelector(".test-wrapper");
 const testArea = document.querySelector("#test-area");
 // const originText = document.querySelector("#origin-text p").innerHTML;
 const originTextBox = document.querySelector("#origin-text p");
+const errorCountDisplay = document.querySelector(".error-count");
 const resetButton = document.querySelector("#reset");
 const stopButton = document.querySelector("#stop");
+const deathmatchBtn = document.querySelector("#deathmatch");
 const theTimer = document.querySelector(".timer");
 
-
+testArea.focus();
 originTextBox.innerHTML = "A sample sentence used for testing.";
 // Add leading zero to numbers 9 or below (purely for aesthetics):
+
+
 function timerToString(){
     let stringTimerHS = timerHS;
     if(stringTimerHS<10){
@@ -72,8 +78,15 @@ function currentlyMatching(e){
     let charLength = testArea.value.length;
     if(testArea.value == originTextBox.innerHTML.substring(0, charLength)){
         testWrapper.style.borderColor = "#8080ff";
+        oldCharLength = charLength;
     }else{
         testWrapper.style.borderColor = "#ff8080";
+        if(charLength > oldCharLength){
+            errorCount++;
+        }
+        oldCharLength = charLength;
+        errorCountDisplay.innerHTML = "Errors: " + errorCount;
+        // errorCountDisplay.innerHTML = "Errors: "+errorCount+"OLD:" +oldCharLength+"NEW:"+charLength;
     }
 }
 
@@ -100,6 +113,7 @@ function stopTimer(e){
         testArea.setAttribute("disabled", true);
     }
     // alert(originTextBox.innerHTML);
+    testArea.focus();
 }
 
 function updateStop(e){
@@ -138,6 +152,9 @@ function resetTimer(e){
     stopButton.style.color = "#e9160f";
     stopButton.innerHTML = "Stop";
     Math.random()>.5? originTextBox.innerHTML = "Another sample sentence that can be used for testing.":originTextBox.innerHTML = "A third sentence which is a sample utilized for testing."
+    testArea.focus();
+    errorCount = 0;
+    errorCountDisplay.innerHTML = "Errors: "+errorCount;;
 }
 
 // Event listeners for keyboard input and the reset button:
@@ -149,3 +166,4 @@ stopButton.addEventListener("mouseleave", this.stopHoveringStopBtn);
 stopButton.addEventListener("mouse", this.hoveringStopBtn);
 resetButton.addEventListener("click", this.resetTimer);
 testArea.addEventListener('input', this.testMatch);
+deathmatchBtn.addEventListener("change", (e)=>{console.log(deathmatchBtn.value)})
