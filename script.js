@@ -10,7 +10,7 @@ let isStopped = true;
 let errorCount = 0;
 let oldCharLength = 0;
 
-localStorage.clear();
+// localStorage.clear();
 
 let userCount = JSON.parse(localStorage.getItem("userTotal"))+1 || 0;
 let scoresWPM = JSON.parse(localStorage.getItem("scoresWPM")|| '[]') ;
@@ -305,12 +305,12 @@ function updateLeaderboard(){
     if(scoresWPM.length !=0){
         leaderboardScoresWPM.style.textAlign = "left";
         if(scoresTime.length == 3){
-            leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0].wpm + " ----- ("+scoresWPM[0].chars+"chars)<br>2. "+scoresWPM[1].wpm+ " ----- ("+scoresWPM[1].chars+"chars)<br>3. "+scoresWPM[2].wpm +" ----- ("+scoresWPM[2].chars+"chars)";
+            leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0].username+": "+ scoresWPM[0].wpm + "WPM ----- ("+scoresWPM[0].chars+"chars)<br>2. "+scoresWPM[1].username+": "+ scoresWPM[1].wpm+ "WPM ----- ("+scoresWPM[1].chars+"chars)<br>3. "+scoresWPM[2].username+": "+ scoresWPM[2].wpm +"WPM ----- ("+scoresWPM[2].chars+"chars)";
         }else if(scoresWPM.length == 2){
-            leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0].wpm + " ----- ("+scoresWPM[0].chars+"chars)<br>2. "+scoresWPM[1].wpm+ " ----- ("+scoresWPM[1].chars+"chars)";
+            leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0].username+": "+ scoresWPM[0].wpm + "WPM ----- ("+scoresWPM[0].chars+"chars)<br>2. "+scoresWPM[1].username+": "+ scoresWPM[1].wpm+ "WPM ----- ("+scoresWPM[1].chars+"chars)";
         }else{
             // scoresWPM.wpm = Math.floor(scoresWPM.wpm)
-            leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0].wpm + " ----- ("+scoresWPM[0].chars+"chars)";
+            leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0].username+": "+ scoresWPM[0].wpm + "WPM ----- ("+scoresWPM[0].chars+"chars)";
         }
         // console.log(scoresWPM.length == 0);
         // console.log(scoresWPM);
@@ -321,11 +321,11 @@ function updateLeaderboard(){
     if(scoresTime.length !=0){
         leaderboardScoresTime.style.textAlign = "left";
         if(scoresTime.length == 3){
-            leaderboardScoresTime.innerHTML = "1. " + scoresTime[0].timeString + "<br>2. "+scoresTime[1].timeString+"<br>3. "+scoresTime[2].timeString;
+            leaderboardScoresTime.innerHTML = "1. " + scoresTime[0].username+": "+ scoresTime[0].timeString + "<br>2. "+scoresTime[1].username+": "+ scoresTime[1].timeString+"<br>3. "+scoresTime[2].username+": "+ scoresTime[2].timeString;
         }else if(scoresTime.length == 2){
-            leaderboardScoresTime.innerHTML = "1. " + scoresTime[0].timeString + "<br>2. "+scoresTime[1].timeString;
+            leaderboardScoresTime.innerHTML = "1. " + scoresTime[0].username+": "+ scoresTime[0].timeString + "<br>2. "+scoresTime[1].username+": "+ scoresTime[1].timeString;
         }else{
-            leaderboardScoresTime.innerHTML = "1. " + scoresTime[0].timeString;
+            leaderboardScoresTime.innerHTML = "1. " + scoresTime[0].username+": "+ scoresTime[0].timeString;
         }
         // console.log(scoresWPM.length == 0);
         // console.log(scoresWPM);
@@ -339,7 +339,7 @@ function updateLeaderboard(){
         localStorage.setItem("scoresWPM", JSON.stringify(scoresWPM));
     }
     if(scoresTime.length > 0){
-        localStorage.setItem("scoreTime", JSON.stringify(scoresTime));
+        localStorage.setItem("scoresTime", JSON.stringify(scoresTime));
     }
 }
 function startTimer(e){
