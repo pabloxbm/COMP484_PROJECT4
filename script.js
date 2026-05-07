@@ -10,7 +10,7 @@ let isStopped = true;
 let errorCount = 0;
 let oldCharLength = 0;
 let hasPlayed = false;
-// localStorage.clear();
+localStorage.clear();
 
 let userCount = (JSON.parse(localStorage.getItem("userTotal"))+1) || 0;
 let scoresWPM = JSON.parse(localStorage.getItem("scoresWPM")|| '[]') ;
