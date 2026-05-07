@@ -10,6 +10,11 @@ let isStopped = true;
 let errorCount = 0;
 let oldCharLength = 0;
 let hasPlayed = false;
+var sentencesArray = ["The quick brown fox jumped over the lazy dogs, but the dog got scared and ran away with the owner chasing soon after.", 
+    "The cat in that hat is a book about a cat in the hat which is a cat with a hat being worn by the cat in the hat whos hat is colored along with the cat, what about that.",
+    "This is a longer sentence that some of the other ones because I decided it would be, the characters arent that crazy there isn't a letter z, x, or y, except for the ones I just stated, make sure to capitolize correctly!",
+    "This sentence is going to be a shorter one because I don't know what to write or use in these example sentences for the type speed test.",
+    "Instead of reusing the sentence at the start I am going to write an entirely new one for the last sentence in this array who knew I wouldn't use the one I knew but rather a new one."]
 localStorage.clear();
 
 let userCount = (JSON.parse(localStorage.getItem("userTotal"))+1) || 0;
@@ -56,7 +61,7 @@ const celebSound = new Audio('assets/celebration_yay.mp3');
 // console.log(leaderboardScoresWPM);
 // console.log(main);
 testArea.focus();
-originTextBox.innerHTML = "A sample sentence used for testing.";
+originTextBox.innerHTML = "This is the first sentence that pops up when you load the site, it isn't quite long and not that difficult to type.";
 // Add leading zero to numbers 9 or below (purely for aesthetics):
 
 // function leaderboardTimerToString(timedM, timedS, timedHS){
@@ -471,7 +476,9 @@ function resetTimer(e){
     stopButton.style.backgroundColor = "white";
     stopButton.style.color = "#e9160f";
     stopButton.innerHTML = "Stop";
-    Math.random()>.5? originTextBox.innerHTML = "Another sample sentence that can be used for testing.":originTextBox.innerHTML = "A third sentence which is a sample utilized for testing."
+    // Math.random()>.5? originTextBox.innerHTML = "Another sample sentence that can be used for testing.":originTextBox.innerHTML = "A third sentence which is a sample utilized for testing."
+    let randomNum = Math.random()*5;
+    originTextBox.innerHTML = sentencesArray[Math.floor(randomNum)];
     testArea.focus();
     errorCount = 0;
     errorCountDisplay.innerHTML = "";
