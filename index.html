@@ -27,9 +27,14 @@
                 <textarea id="test-area" name="textarea" rows="6" placeholder="The clock starts when you start typing."></textarea>
             </div><!-- .test-wrapper -->
 
-            <div class="error-count">
-                Errors: 
-                <!-- <p>Errors: </p> -->
+            <div class="extra-info">
+                <div class="wpm">
+                    WPM: 0.0
+                </div>
+                <div class="error-count">
+                    
+                    <!-- <p>Errors: </p> -->
+                </div>
             </div>
 
             <div class="meta">
@@ -39,15 +44,29 @@
 
                 <button id="stop">Stop</button>
                 <button id="reset">Start over</button>
-                
-                <label id="deathmatch-container"disabled>
-                    DeathMatch Mode
-                    <br>
-                    <input type="checkbox" id="deathmatch" ></input>
-                    <span class="dmstyle"></span>
-                </label>
+                <div id="deathmatch-section">
+                    Sudden Death Mode
+                    <label id="deathmatch-container"disabled>
+                        <br>
+                        <input type="checkbox" id="deathmatch"></input>
+                        <span class="dmstyle"></span>
+                    </label>
+                </div>
             </div><!-- .meta -->
         </section><!-- .test-area -->
+        <section class="leaderboard-area">
+            <div class="leaderboard-header">
+                Leaderboards
+            </div>
+            <div class="leaderboard-scores" id="leaderboard-scores-wpm">
+                <p>WPM</p>
+                <div>[Fastest By WPM]</div>
+            </div>
+            <div class="leaderboard-scores" id="leaderboard-scores-time">
+                <p>TIME</p>
+                <div>[Fastest By Time]</div>
+            </div>
+        </section><!-- .leaderboard-area -->
     </main>
 
 </body>

@@ -1,4 +1,7 @@
 let intervalTimer = null;
+let wpmIntervalTimer = null;
+// let intervalTimerTest = null;
+let currentWPM = 0;
 var timerHS = 0;
 var timerS = 0;
 var timerM = 0;
@@ -7,20 +10,57 @@ let isStopped = true;
 let errorCount = 0;
 let oldCharLength = 0;
 
+localStorage.clear();
+
+let userCount = JSON.parse(localStorage.getItem("userTotal"))+1 || 0;
+let scoresWPM = JSON.parse(localStorage.getItem("scoresWPM")|| '[]') ;
+let scoresTime= JSON.parse(localStorage.getItem("scoresTime")|| '[]') ;
+
+// if(scoresWPM == '[]'){
+//     scoresWPM = [];
+// }
+// console.log(scoresWPM)
+// console.log(scoresWPM == '[]')
+// if(scoresTime== '[]'){
+//     scoresTime = [];
+// }
 const testWrapper = document.querySelector(".test-wrapper");
+const main = document.querySelector(".main");
 const testArea = document.querySelector("#test-area");
 // const originText = document.querySelector("#origin-text p").innerHTML;
 const originTextBox = document.querySelector("#origin-text p");
 const errorCountDisplay = document.querySelector(".error-count");
 const resetButton = document.querySelector("#reset");
 const stopButton = document.querySelector("#stop");
+const wpmDisplay = document.querySelector(".wpm")
 const deathmatchBtn = document.querySelector("#deathmatch");
 const theTimer = document.querySelector(".timer");
+const leaderboardScores = document.querySelector(".leaderboard-scores");
+const leaderboardScoresWPM = document.querySelector("#leaderboard-scores-wpm div");
+const leaderboardScoresTime = document.querySelector("#leaderboard-scores-time div");
 
+// if(scoresWPM.length !=0){
+//     if(scoresTime.length == 3){
+//         leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0] + "<br>2. "+scoresWPM[1]+"<br>3. "+scoresWPM[2];
+//     }else if(scoresWPM.length == 2){
+//         leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0] + "<br>2. "+scoresWPM[1];
+//     }else{
+//         leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0];
+//     }
+//     // console.log(scoresWPM.length == 0);
+//     // console.log(scoresWPM);
+// }else{
+//     leaderboardScoresWPM.innerHTML = "test";
+// }
+// console.log(leaderboardScoresWPM);
+// console.log(main);
 testArea.focus();
 originTextBox.innerHTML = "A sample sentence used for testing.";
 // Add leading zero to numbers 9 or below (purely for aesthetics):
 
+// function leaderboardTimerToString(timedM, timedS, timedHS){
+
+// }
 
 function timerToString(){
     let stringTimerHS = timerHS;
@@ -52,6 +92,7 @@ function runningTimer(){
     }
     // console.log("running");
     // alert("yo its running");
+    
     theTimer.innerHTML = timerToString();
 }
 // Match the text entered with the provided text on the page:
@@ -69,7 +110,29 @@ function testMatch(e){
         // alert("yo it matched");
         hasCompleted = true;
         testWrapper.style.borderColor = "#80ff80";
-        stopTimer(e)
+        stopTimer(e);
+        updateLeaderboard();
+        // localStorage.setItem("1st", "Bob");
+    }else{
+        if(errorCount > 3 && deathmatchBtn.checked){
+            resetTimer(e);
+            testArea.setAttribute("disabled", true);
+            // main.style.backgroundColor = "red";
+            main.style.backgroundColor = "#ff0000";
+            setTimeout(()=>{
+                main.style.backgroundColor = ""
+            }, 100)
+            setTimeout(()=>{
+                if(testArea.hasAttribute("disabled")){
+                    testArea.toggleAttribute("disabled");
+                }
+                
+                testArea.focus();
+                console.log("testing");
+
+            }, 300)
+
+        }
     }
 }
 
@@ -90,11 +153,202 @@ function currentlyMatching(e){
     }
 }
 
+function updateWPM(){
+    currentWPM = (testArea.value.length / 5) / (((60*timerM)+timerS+(timerHS/100))/60);
+    wpmDisplay.innerHTML = "WPM: "+ Math.floor(currentWPM);
+}
+
+function updateLeaderboard(){
+    //eee
+    if(hasCompleted){
+        if(scoresWPM.length !=0){
+            if(scoresWPM.length == 3){
+                if(currentWPM > parseInt(scoresWPM[0].wpm)){
+                    scoresWPM.unshift({username: "User"+userCount,
+                        wpm: Math.floor(currentWPM), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                    scoresWPM.pop()
+                }else if (currentWPM > parseInt(scoresWPM[1].wpm)){
+                    scoresWPM.splice(1, 0, {username: "User"+userCount,
+                        wpm: Math.floor(currentWPM), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                    scoresWPM.pop()
+                }else if (currentWPM > parseInt(scoresWPM[2].wpm)){
+                    scoresWPM.splice(2, 0, {username: "User"+userCount,
+                        wpm: Math.floor(currentWPM), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                    scoresWPM.pop()
+                }
+            }else if(scoresWPM.length == 2){
+                if(currentWPM > parseInt(scoresWPM[0].wpm)){
+                    scoresWPM.unshift({username: "User"+userCount,
+                        wpm: Math.floor(currentWPM), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                }else if (currentWPM > parseInt(scoresWPM[1].wpm)){
+                    scoresWPM.splice(1, 0, {username: "User"+userCount,
+                        wpm: Math.floor(currentWPM), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                }else{
+                    scoresWPM.push({username: "User"+userCount,
+                        wpm: Math.floor(currentWPM), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                }
+            }else{
+                if(currentWPM > parseInt(scoresWPM[0].wpm)){
+                    scoresWPM.unshift({username: "User"+userCount,
+                        wpm: Math.floor(currentWPM), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                }else{
+                    scoresWPM.push({username: "User"+userCount,
+                        wpm: Math.floor(currentWPM), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                }
+            }
+            // console.log(scoresWPM.length == 0);
+            // console.log(scoresWPM);
+        }else{
+            scoresWPM.unshift({username: "User"+userCount,
+                wpm: Math.floor(currentWPM), 
+                chars: testArea.value.length, 
+                time: ((60*timerM)+timerS+(timerHS/100))
+            });
+        }
+
+        
+        if(scoresTime.length !=0){
+            if(scoresTime.length == 3){
+                if(((60*timerM)+timerS+(timerHS/100)) < scoresTime[0].time){
+                    scoresTime.unshift({username: "User"+userCount,
+                        timeString: timerToString(), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                    scoresTime.pop()
+                }else if (((60*timerM)+timerS+(timerHS/100)) < scoresTime[1].time){
+                    scoresTime.splice(1, 0, {username: "User"+userCount,
+                        timeString: timerToString(), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                    scoresTime.pop()
+                }else if (((60*timerM)+timerS+(timerHS/100)) < scoresTime[2].time){
+                    scoresTime.splice(2, 0, {username: "User"+userCount,
+                        timeString: timerToString(), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                    scoresTime.pop()
+                }
+            }else if(scoresTime.length == 2){
+                if(((60*timerM)+timerS+(timerHS/100)) < scoresTime[0].time){
+                    scoresTime.unshift({username: "User"+userCount,
+                        timeString: timerToString(), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                }else if (((60*timerM)+timerS+(timerHS/100)) < scoresTime[1].time){
+                    scoresTime.splice(1, 0, {username: "User"+userCount,
+                        timeString: timerToString(), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                }else{
+                    scoresTime.push({username: "User"+userCount,
+                        timeString: timerToString(), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                }
+            }else{
+                if(((60*timerM)+timerS+(timerHS/100)) < scoresTime[0].time){
+                    scoresTime.unshift({username: "User"+userCount,
+                        timeString: timerToString(), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                }else{
+                    scoresTime.push({username: "User"+userCount,
+                        timeString: timerToString(), 
+                        chars: testArea.value.length, 
+                        time: ((60*timerM)+timerS+(timerHS/100))
+                    });
+                }
+            }
+            // console.log(scoresWPM.length == 0);
+            // console.log(scoresWPM);
+        }else{
+            scoresTime.unshift({username: "User"+userCount,
+                timeString: timerToString(), 
+                chars: testArea.value.length, 
+                time: ((60*timerM)+timerS+(timerHS/100))
+            });
+        }
+    }
+    
+    // Updated Display
+    if(scoresWPM.length !=0){
+        leaderboardScoresWPM.style.textAlign = "left";
+        if(scoresTime.length == 3){
+            leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0].wpm + " ----- ("+scoresWPM[0].chars+"chars)<br>2. "+scoresWPM[1].wpm+ " ----- ("+scoresWPM[1].chars+"chars)<br>3. "+scoresWPM[2].wpm +" ----- ("+scoresWPM[2].chars+"chars)";
+        }else if(scoresWPM.length == 2){
+            leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0].wpm + " ----- ("+scoresWPM[0].chars+"chars)<br>2. "+scoresWPM[1].wpm+ " ----- ("+scoresWPM[1].chars+"chars)";
+        }else{
+            // scoresWPM.wpm = Math.floor(scoresWPM.wpm)
+            leaderboardScoresWPM.innerHTML = "1. " + scoresWPM[0].wpm + " ----- ("+scoresWPM[0].chars+"chars)";
+        }
+        // console.log(scoresWPM.length == 0);
+        // console.log(scoresWPM);
+    }else{
+        leaderboardScoresWPM.style.textAlign = "center";
+        // leaderboardScoresWPM.innerHTML = "test";
+    }
+    if(scoresTime.length !=0){
+        leaderboardScoresTime.style.textAlign = "left";
+        if(scoresTime.length == 3){
+            leaderboardScoresTime.innerHTML = "1. " + scoresTime[0].timeString + "<br>2. "+scoresTime[1].timeString+"<br>3. "+scoresTime[2].timeString;
+        }else if(scoresTime.length == 2){
+            leaderboardScoresTime.innerHTML = "1. " + scoresTime[0].timeString + "<br>2. "+scoresTime[1].timeString;
+        }else{
+            leaderboardScoresTime.innerHTML = "1. " + scoresTime[0].timeString;
+        }
+        // console.log(scoresWPM.length == 0);
+        // console.log(scoresWPM);
+    }else{
+        // leaderboardScoresTime.innerHTML = "test";
+        leaderboardScoresTime.style.textAlign = "center";
+        // leaderboardScoresTime.style.backgroundColor = "red";
+    }
+    localStorage.setItem("userTotal", JSON.stringify(userCount));
+    if(scoresWPM.length > 0){
+        localStorage.setItem("scoresWPM", JSON.stringify(scoresWPM));
+    }
+    if(scoresTime.length > 0){
+        localStorage.setItem("scoreTime", JSON.stringify(scoresTime));
+    }
+}
 function startTimer(e){
     if(!hasCompleted){
         // originTextBox.innerHTML = "A sample sentence used for testing.";
         if(intervalTimer == null){
             intervalTimer = setInterval(()=>runningTimer(), 10);
+            wpmIntervalTimer = setInterval(()=>updateWPM(), 50);
+            // intervalTimerTest = setInterval(()=>console.log(deathmatchBtn.value), 100);
             // console.log("testing");
         }
         stopButton.style.backgroundColor = "white";
@@ -107,6 +361,8 @@ function startTimer(e){
 // Reset everything:
 function stopTimer(e){
     clearInterval(intervalTimer);
+    clearInterval(wpmIntervalTimer);
+    // clearInterval(intervalTimerTest);
     intervalTimer = null;
     theTimer.innerHTML = timerToString();
     if(hasCompleted){
@@ -129,18 +385,22 @@ function hoveringStopBtn(e){
     if(!hasCompleted && !(testArea.value=="") && !isStopped){
         stopButton.style.backgroundColor = "#e9160f";
         stopButton.style.color = "white";
+        // stopButton.style.borderColor = "black";
     }
 }
 function stopHoveringStopBtn(e){
     if(!hasCompleted && !(testArea.value=="") && !isStopped){
         stopButton.style.backgroundColor = "white";
         stopButton.style.color = "#e9160f";
+        // stopButton.style.borderColor = "#e9160f";
     }
 }
 function resetTimer(e){
     timerHS = 0;
     timerS = 0;
     timerM = 0;
+    currentWPM = 0;
+    wpmDisplay.innerHTML = "WPM: 0"
     stopTimer(e);
     testArea.value = "";
     hasCompleted = false;
@@ -154,10 +414,11 @@ function resetTimer(e){
     Math.random()>.5? originTextBox.innerHTML = "Another sample sentence that can be used for testing.":originTextBox.innerHTML = "A third sentence which is a sample utilized for testing."
     testArea.focus();
     errorCount = 0;
-    errorCountDisplay.innerHTML = "Errors: "+errorCount;;
+    errorCountDisplay.innerHTML = "";
 }
 
 // Event listeners for keyboard input and the reset button:
+testArea.addEventListener("paste", (e)=>e.preventDefault());
 testArea.addEventListener("input", this.startTimer);
 stopButton.addEventListener("click", this.stopTimer);
 stopButton.addEventListener("click", this.updateStop);
@@ -166,4 +427,5 @@ stopButton.addEventListener("mouseleave", this.stopHoveringStopBtn);
 stopButton.addEventListener("mouse", this.hoveringStopBtn);
 resetButton.addEventListener("click", this.resetTimer);
 testArea.addEventListener('input', this.testMatch);
-deathmatchBtn.addEventListener("change", (e)=>{console.log(deathmatchBtn.value)})
+
+updateLeaderboard();
