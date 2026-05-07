@@ -15,7 +15,7 @@ var sentencesArray = ["The quick brown fox jumped over the lazy dogs, but the do
     "This is a longer sentence that some of the other ones because I decided it would be, the characters arent that crazy there isn't a letter z, x, or y, except for the ones I just stated, make sure to capitolize correctly!",
     "This sentence is going to be a shorter one because I don't know what to write or use in these example sentences for the type speed test.",
     "Instead of reusing the sentence at the start I am going to write an entirely new one for the last sentence in this array who knew I wouldn't use the one I knew but rather a new one."]
-localStorage.clear();
+// localStorage.clear();
 
 let userCount = (JSON.parse(localStorage.getItem("userTotal"))+1) || 0;
 let scoresWPM = JSON.parse(localStorage.getItem("scoresWPM")|| '[]') ;

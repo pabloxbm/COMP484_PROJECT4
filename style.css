@@ -197,6 +197,7 @@ body {
     margin: 1em 0;
     padding: 1em 1em 0;
     background-color: #ededed;
+    min-height: 150px;
     text-align: left;
 }
 
