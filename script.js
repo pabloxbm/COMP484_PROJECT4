@@ -10,7 +10,7 @@ let isStopped = true;
 let errorCount = 0;
 let oldCharLength = 0;
 
-// localStorage.clear();
+localStorage.clear();
 
 let userCount = JSON.parse(localStorage.getItem("userTotal"))+1 || 0;
 let scoresWPM = JSON.parse(localStorage.getItem("scoresWPM")|| '[]') ;
@@ -360,6 +360,7 @@ function startTimer(e){
 
 // Reset everything:
 function stopTimer(e){
+    e.preventDefault();
     clearInterval(intervalTimer);
     clearInterval(wpmIntervalTimer);
     // clearInterval(intervalTimerTest);
@@ -369,19 +370,25 @@ function stopTimer(e){
         testArea.setAttribute("disabled", true);
     }
     // alert(originTextBox.innerHTML);
+    // hoveringStopBtn(e);
     testArea.focus();
 }
 
 function updateStop(e){
+    e.preventDefault();
     if(!hasCompleted && !(testArea.value=="")){
         stopButton.style.backgroundColor = "#e9160f";
         stopButton.style.color = "white";
         stopButton.innerHTML = "Stopped";
         isStopped = true;
+    }else{
+        // hoveringStopBtn(e);
+        // alert("REST")
     }
 }
 
 function hoveringStopBtn(e){
+    e.preventDefault();
     if(!hasCompleted && !(testArea.value=="") && !isStopped){
         stopButton.style.backgroundColor = "#e9160f";
         stopButton.style.color = "white";
@@ -389,6 +396,7 @@ function hoveringStopBtn(e){
     }
 }
 function stopHoveringStopBtn(e){
+    e.preventDefault();
     if(!hasCompleted && !(testArea.value=="") && !isStopped){
         stopButton.style.backgroundColor = "white";
         stopButton.style.color = "#e9160f";
@@ -421,10 +429,10 @@ function resetTimer(e){
 testArea.addEventListener("paste", (e)=>e.preventDefault());
 testArea.addEventListener("input", this.startTimer);
 stopButton.addEventListener("click", this.stopTimer);
+stopButton.addEventListener("mouseover", this.hoveringStopBtn);
+stopButton.addEventListener("mouseout", this.stopHoveringStopBtn);
 stopButton.addEventListener("click", this.updateStop);
-stopButton.addEventListener("mouseenter", this.hoveringStopBtn);
-stopButton.addEventListener("mouseleave", this.stopHoveringStopBtn);
-stopButton.addEventListener("mouse", this.hoveringStopBtn);
+// stopButton.addEventListener("mouse", this.hoveringStopBtn);
 resetButton.addEventListener("click", this.resetTimer);
 testArea.addEventListener('input', this.testMatch);
 
