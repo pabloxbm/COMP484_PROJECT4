@@ -9,8 +9,8 @@ let hasCompleted = false;
 let isStopped = true;
 let errorCount = 0;
 let oldCharLength = 0;
-
-localStorage.clear();
+let hasPlayed = false;
+// localStorage.clear();
 
 let userCount = (JSON.parse(localStorage.getItem("userTotal"))+1) || 0;
 let scoresWPM = JSON.parse(localStorage.getItem("scoresWPM")|| '[]') ;
@@ -38,6 +38,7 @@ const theTimer = document.querySelector(".timer");
 const leaderboardScores = document.querySelector(".leaderboard-scores");
 const leaderboardScoresWPM = document.querySelector("#leaderboard-scores-wpm div");
 const leaderboardScoresTime = document.querySelector("#leaderboard-scores-time div");
+const celebSound = new Audio('assets/celebration_yay.mp3');
 
 // if(scoresWPM.length !=0){
 //     if(scoresTime.length == 3){
@@ -128,7 +129,7 @@ function testMatch(e){
                 }
                 
                 testArea.focus();
-                console.log("testing");
+                // console.log("testing");
 
             }, 300)
 
@@ -140,12 +141,15 @@ function testMatch(e){
 function currentlyMatching(e){
     let charLength = testArea.value.length;
     if(testArea.value == originTextBox.innerHTML.substring(0, charLength)){
+            // console.log("error count testing: "+originTextBox.innerHTML.substring(0, charLength));
         testWrapper.style.borderColor = "#8080ff";
         oldCharLength = charLength;
     }else{
         testWrapper.style.borderColor = "#ff8080";
         if(charLength > oldCharLength){
+            // console.log("error count before: "+errorCount);
             errorCount++;
+            // console.log("error count after: "+errorCount);
         }
         oldCharLength = charLength;
         errorCountDisplay.innerHTML = "Errors: " + errorCount;
@@ -169,6 +173,8 @@ function updateLeaderboard(){
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    celebSound.play();
+                    hasPlayed = true;
                     scoresWPM.pop()
                 }else if (currentWPM > parseInt(scoresWPM[1].wpm)){
                     scoresWPM.splice(1, 0, {username: "User"+userCount,
@@ -176,6 +182,8 @@ function updateLeaderboard(){
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    celebSound.play();
+                    hasPlayed = true;
                     scoresWPM.pop()
                 }else if (currentWPM > parseInt(scoresWPM[2].wpm)){
                     scoresWPM.splice(2, 0, {username: "User"+userCount,
@@ -183,6 +191,8 @@ function updateLeaderboard(){
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    celebSound.play();
+                    hasPlayed = true;
                     scoresWPM.pop()
                 }
             }else if(scoresWPM.length == 2){
@@ -192,18 +202,24 @@ function updateLeaderboard(){
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    celebSound.play();
+                    hasPlayed = true;
                 }else if (currentWPM > parseInt(scoresWPM[1].wpm)){
                     scoresWPM.splice(1, 0, {username: "User"+userCount,
                         wpm: Math.floor(currentWPM), 
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    celebSound.play();
+                    hasPlayed = true;
                 }else{
                     scoresWPM.push({username: "User"+userCount,
                         wpm: Math.floor(currentWPM), 
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    celebSound.play();
+                    hasPlayed = true;
                 }
             }else{
                 if(currentWPM > parseInt(scoresWPM[0].wpm)){
@@ -212,12 +228,16 @@ function updateLeaderboard(){
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    celebSound.play();
+                    hasPlayed = true;
                 }else{
                     scoresWPM.push({username: "User"+userCount,
                         wpm: Math.floor(currentWPM), 
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    celebSound.play();
+                    hasPlayed = true;
                 }
             }
             // console.log(scoresWPM.length == 0);
@@ -228,6 +248,8 @@ function updateLeaderboard(){
                 chars: testArea.value.length, 
                 time: ((60*timerM)+timerS+(timerHS/100))
             });
+            celebSound.play();
+            hasPlayed = true;
         }
 
         
@@ -239,6 +261,9 @@ function updateLeaderboard(){
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    if(!hasPlayed){
+                        celebSound.play();
+                    }
                     scoresTime.pop()
                 }else if (((60*timerM)+timerS+(timerHS/100)) < scoresTime[1].time){
                     scoresTime.splice(1, 0, {username: "User"+userCount,
@@ -246,6 +271,9 @@ function updateLeaderboard(){
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    if(!hasPlayed){
+                        celebSound.play();
+                    }
                     scoresTime.pop()
                 }else if (((60*timerM)+timerS+(timerHS/100)) < scoresTime[2].time){
                     scoresTime.splice(2, 0, {username: "User"+userCount,
@@ -253,6 +281,9 @@ function updateLeaderboard(){
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    if(!hasPlayed){
+                        celebSound.play();
+                    }
                     scoresTime.pop()
                 }
             }else if(scoresTime.length == 2){
@@ -262,18 +293,27 @@ function updateLeaderboard(){
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    if(!hasPlayed){
+                        celebSound.play();
+                    }
                 }else if (((60*timerM)+timerS+(timerHS/100)) < scoresTime[1].time){
                     scoresTime.splice(1, 0, {username: "User"+userCount,
                         timeString: timerToString(), 
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    if(!hasPlayed){
+                        celebSound.play();
+                    }
                 }else{
                     scoresTime.push({username: "User"+userCount,
                         timeString: timerToString(), 
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    if(!hasPlayed){
+                        celebSound.play();
+                    }
                 }
             }else{
                 if(((60*timerM)+timerS+(timerHS/100)) < scoresTime[0].time){
@@ -282,12 +322,18 @@ function updateLeaderboard(){
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    if(!hasPlayed){
+                        celebSound.play();
+                    }
                 }else{
                     scoresTime.push({username: "User"+userCount,
                         timeString: timerToString(), 
                         chars: testArea.value.length, 
                         time: ((60*timerM)+timerS+(timerHS/100))
                     });
+                    if(!hasPlayed){
+                        celebSound.play();
+                    }
                 }
             }
             // console.log(scoresWPM.length == 0);
@@ -298,9 +344,13 @@ function updateLeaderboard(){
                 chars: testArea.value.length, 
                 time: ((60*timerM)+timerS+(timerHS/100))
             });
+            if(!hasPlayed){
+                celebSound.play();
+            }
         }
     }
     
+    hasPlayed = false;
     // Updated Display
     if(scoresWPM.length !=0){
         leaderboardScoresWPM.style.textAlign = "left";
@@ -355,6 +405,7 @@ function startTimer(e){
         stopButton.style.color = "#e9160f";
         stopButton.innerHTML = "Stop";
         isStopped = false;
+        // testMatch(e);
     }
 }
 
@@ -408,6 +459,7 @@ function resetTimer(e){
     timerS = 0;
     timerM = 0;
     currentWPM = 0;
+    oldCharLength = 0;
     wpmDisplay.innerHTML = "WPM: 0"
     stopTimer(e);
     testArea.value = "";
@@ -435,5 +487,6 @@ stopButton.addEventListener("click", this.updateStop);
 // stopButton.addEventListener("mouse", this.hoveringStopBtn);
 resetButton.addEventListener("click", this.resetTimer);
 testArea.addEventListener('input', this.testMatch);
+deathmatchBtn.addEventListener('click', (e)=>{testArea.focus();});
 
 updateLeaderboard();
