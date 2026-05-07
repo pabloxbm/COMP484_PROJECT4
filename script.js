@@ -12,7 +12,7 @@ let oldCharLength = 0;
 
 localStorage.clear();
 
-let userCount = JSON.parse(localStorage.getItem("userTotal"))+1 || 0;
+let userCount = (JSON.parse(localStorage.getItem("userTotal"))+1) || 0;
 let scoresWPM = JSON.parse(localStorage.getItem("scoresWPM")|| '[]') ;
 let scoresTime= JSON.parse(localStorage.getItem("scoresTime")|| '[]') ;
 
