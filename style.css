@@ -256,6 +256,8 @@ body {
     background-color: #e9160f;
 }
 
+/*  reference: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_checkbox
+    used to help with styling deathmatch button */
 #deathmatch-section{
     margin-top: 30px;
     width: 100%;

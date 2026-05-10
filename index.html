@@ -45,11 +45,15 @@
                     <div class="timer">00:00:00</div>
                 </section>
 
+                <!-- Added the stop button, it helped with testing the timer -->
                 <button id="stop">Stop</button>
                 <button id="reset">Start over</button>
+                <!-- Added the sudden death mode button, accidentally named it deathmatch instead -->
                 <div id="deathmatch-section">
                     Sudden Death Mode
-                    <label id="deathmatch-container"disabled>
+                    
+                    <!-- Label for the checkbox input and span for the tyle -->
+                    <label id="deathmatch-container"disabled> 
                         <br>
                         <input type="checkbox" id="deathmatch"></input>
                         <span class="dmstyle"></span>
@@ -57,10 +61,13 @@
                 </div>
             </div><!-- .meta -->
         </section><!-- .test-area -->
+        <!-- Area for the leaderboard -->
         <section class="leaderboard-area">
+            <!-- header  for the leaderboard -->
             <div class="leaderboard-header">
                 Leaderboards
             </div>
+            <!-- divs for the two sections with a temp text when there are no scores -->
             <div class="leaderboard-scores" id="leaderboard-scores-wpm">
                 <p>WPM</p>
                 <div>[Fastest By WPM]</div>
